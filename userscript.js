@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         JS-OmniEye Full Console
+// @name         JS-OmniEye
 // @namespace    http://tampermonkey.net/
 // @version      2025-09-01
 // @description  One file debugger, made with much love
@@ -7,6 +7,7 @@
 // @run-at       document-start
 // @include      *
 // @match        *://*/*
+// @icon         https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThUUqw5jj4HYkQ56R0JOJZL9hztGN10jHmrA&s
 // @grant        unsafeWindow
 // ==/UserScript==
 
