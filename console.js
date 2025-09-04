@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Web Console Pro
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  Console for executing JS code - for those who know what they are doing
 // @author       JSaon
 // @match        *://*/*
@@ -44,6 +44,7 @@
             justify-content: space-between !important;
             align-items: center !important;
             user-select: none !important;
+            touch-action: none !important;
         }
 
         #console-toggle-pro {
@@ -56,6 +57,24 @@
             font-family: inherit !important;
             font-weight: bold !important;
             font-size: 10px !important;
+            margin-right: 5px;
+        }
+
+        #console-close-pro {
+            background: #000 !important;
+            color: #ff4444 !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 3px 8px !important;
+            cursor: pointer !important;
+            font-family: inherit !important;
+            font-weight: bold !important;
+            font-size: 10px !important;
+        }
+
+        .console-buttons {
+            display: flex !important;
+            gap: 3px !important;
         }
 
         #console-content-pro {
@@ -65,6 +84,7 @@
             flex-direction: column !important;
             gap: 8px !important;
             background: #0a0a0a !important;
+            overflow: hidden !important;
         }
 
         #console-input-pro {
@@ -76,9 +96,11 @@
             font-family: inherit !important;
             font-size: 12px !important;
             resize: vertical !important;
-            min-height: 50px !important;
+            min-height: 60px !important;
+            max-height: 120px !important;
             outline: none !important;
             max-width: 100% !important;
+            flex-shrink: 0 !important;
         }
 
         #console-execute-pro {
@@ -92,6 +114,7 @@
             font-family: inherit !important;
             font-size: 12px !important;
             transition: transform 0.1s ease !important;
+            flex-shrink: 0 !important;
         }
 
         #console-execute-pro:hover {
@@ -110,28 +133,30 @@
             padding: 8px !important;
             font-family: inherit !important;
             font-size: 12px !important;
-            min-height: 80px !important;
-            max-height: 200px !important;
+            min-height: 60px !important;
+            max-height: 150px !important;
             overflow-y: auto !important;
             white-space: pre-wrap !important;
             word-wrap: break-word !important;
             max-width: 100% !important;
+            flex: 1 !important;
         }
 
         .resize-handle {
             position: absolute !important;
             background: transparent !important;
             z-index: 2147483646 !important;
+            touch-action: none !important;
         }
 
-        .resize-handle-top { top: -3px; left: 0; right: 0; height: 6px; cursor: ns-resize !important; }
-        .resize-handle-right { top: 0; right: -3px; bottom: 0; width: 6px; cursor: ew-resize !important; }
-        .resize-handle-bottom { bottom: -3px; left: 0; right: 0; height: 6px; cursor: ns-resize !important; }
-        .resize-handle-left { top: 0; left: -3px; bottom: 0; width: 6px; cursor: ew-resize !important; }
-        .resize-handle-tl { top: -3px; left: -3px; width: 10px; height: 10px; cursor: nwse-resize !important; }
-        .resize-handle-tr { top: -3px; right: -3px; width: 10px; height: 10px; cursor: nesw-resize !important; }
-        .resize-handle-bl { bottom: -3px; left: -3px; width: 10px; height: 10px; cursor: nesw-resize !important; }
-        .resize-handle-br { bottom: -3px; right: -3px; width: 10px; height: 10px; cursor: nwse-resize !important; }
+        .resize-handle-top { top: -5px; left: 0; right: 0; height: 10px; cursor: ns-resize !important; }
+        .resize-handle-right { top: 0; right: -5px; bottom: 0; width: 10px; cursor: ew-resize !important; }
+        .resize-handle-bottom { bottom: -5px; left: 0; right: 0; height: 10px; cursor: ns-resize !important; }
+        .resize-handle-left { top: 0; left: -5px; bottom: 0; width: 10px; cursor: ew-resize !important; }
+        .resize-handle-tl { top: -5px; left: -5px; width: 15px; height: 15px; cursor: nwse-resize !important; }
+        .resize-handle-tr { top: -5px; right: -5px; width: 15px; height: 15px; cursor: nesw-resize !important; }
+        .resize-handle-bl { bottom: -5px; left: -5px; width: 15px; height: 15px; cursor: nesw-resize !important; }
+        .resize-handle-br { bottom: -5px; right: -5px; width: 15px; height: 15px; cursor: nwse-resize !important; }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
@@ -140,29 +165,48 @@
                 left: 2px !important;
                 top: 2px !important;
             }
-
+            
             #console-header-pro {
                 padding: 6px 10px !important;
                 font-size: 11px !important;
             }
-
+            
             #console-content-pro {
                 padding: 8px !important;
+                gap: 6px !important;
             }
-
+            
             #console-input-pro, #console-output-pro {
                 font-size: 11px !important;
                 padding: 6px !important;
+                min-height: 50px !important;
+                max-height: 100px !important;
             }
-
+            
+            #console-output-pro {
+                max-height: 120px !important;
+            }
+            
+            .resize-handle {
+                display: block !important;
+            }
+            
             .resize-handle-top,
             .resize-handle-bottom {
-                height: 8px !important;
+                height: 12px !important;
             }
-
+            
             .resize-handle-left,
             .resize-handle-right {
-                width: 8px !important;
+                width: 12px !important;
+            }
+            
+            .resize-handle-tl,
+            .resize-handle-tr,
+            .resize-handle-bl,
+            .resize-handle-br {
+                width: 20px !important;
+                height: 20px !important;
             }
         }
 
@@ -171,15 +215,27 @@
                 width: 260px !important;
                 max-width: 92vw !important;
             }
-
+            
             #console-header-pro {
                 font-size: 10px !important;
                 padding: 5px 8px !important;
             }
-
-            #console-toggle-pro {
+            
+            #console-toggle-pro,
+            #console-close-pro {
                 padding: 2px 6px !important;
                 font-size: 9px !important;
+            }
+            
+            .console-buttons {
+                gap: 2px !important;
+            }
+        }
+
+        /* Hide resize handles on mobile when not needed */
+        @media (hover: none) and (pointer: coarse) {
+            .resize-handle {
+                display: block !important;
             }
         }
     `);
@@ -201,7 +257,24 @@
 
     const consoleHeader = document.createElement('div');
     consoleHeader.id = 'console-header-pro';
-    consoleHeader.innerHTML = 'Web Console <button id="console-toggle-pro">' + (savedState.expanded ? '▼' : '▲') + '</button>';
+    
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.className = 'console-buttons';
+    
+    const consoleToggle = document.createElement('button');
+    consoleToggle.id = 'console-toggle-pro';
+    consoleToggle.textContent = savedState.expanded ? '▼' : '▲';
+    
+    const consoleClose = document.createElement('button');
+    consoleClose.id = 'console-close-pro';
+    consoleClose.textContent = 'X';
+    consoleClose.title = 'Hide console';
+    
+    buttonsContainer.appendChild(consoleToggle);
+    buttonsContainer.appendChild(consoleClose);
+    
+    consoleHeader.innerHTML = 'Web Console ';
+    consoleHeader.appendChild(buttonsContainer);
 
     const consoleContent = document.createElement('div');
     consoleContent.id = 'console-content-pro';
@@ -261,9 +334,70 @@
         });
     }
 
+    // Touch events for mobile
+    function setupTouchEvents() {
+        let touchStartX, touchStartY, touchStartTime;
+
+        consoleHeader.addEventListener('touchstart', (e) => {
+            if (e.target.id !== 'console-toggle-pro' && e.target.id !== 'console-close-pro') {
+                isDragging = true;
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                touchStartTime = Date.now();
+                startL = parseInt(getComputedStyle(consoleContainer).left) || 0;
+                startT = parseInt(getComputedStyle(consoleContainer).top) || 0;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const touch = e.touches[0];
+                const dx = touch.clientX - touchStartX;
+                const dy = touch.clientY - touchStartY;
+
+                let newLeft = startL + dx;
+                let newTop = startT + dy;
+
+                const maxLeft = window.innerWidth - consoleContainer.offsetWidth;
+                const maxTop = window.innerHeight - consoleContainer.offsetHeight;
+
+                consoleContainer.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
+                consoleContainer.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', () => {
+            if (isDragging) {
+                saveConsolePosition();
+            }
+            isDragging = false;
+        });
+
+        // Touch resize handles
+        document.querySelectorAll('.resize-handle').forEach(handle => {
+            handle.addEventListener('touchstart', (e) => {
+                isResizing = true;
+                resizeDir = handle.className.split(' ')[1];
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+                startW = parseInt(getComputedStyle(consoleContainer).width);
+                startH = parseInt(getComputedStyle(consoleContainer).height);
+                startL = parseInt(getComputedStyle(consoleContainer).left) || 0;
+                startT = parseInt(getComputedStyle(consoleContainer).top) || 0;
+                e.preventDefault();
+            }, { passive: false });
+        });
+    }
+
+    setupTouchEvents();
+
     // Drag functionality
     consoleHeader.addEventListener('mousedown', (e) => {
-        if (e.target.id !== 'console-toggle-pro') {
+        if (e.target.id !== 'console-toggle-pro' && e.target.id !== 'console-close-pro') {
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
@@ -295,14 +429,11 @@
             let newLeft = startL + dx;
             let newTop = startT + dy;
 
-            // Limit to window edges
             const maxLeft = window.innerWidth - consoleContainer.offsetWidth;
             const maxTop = window.innerHeight - consoleContainer.offsetHeight;
 
             consoleContainer.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
             consoleContainer.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
-            consoleContainer.style.right = 'auto';
-            consoleContainer.style.bottom = 'auto';
         }
 
         if (isResizing) {
@@ -344,10 +475,9 @@
                     break;
             }
 
-            // Apply limits - stricter for mobile
             const maxWidth = window.innerWidth - 10;
             const maxHeight = window.innerHeight - 10;
-
+            
             if (resizeDir.includes('left')) newLeft = Math.max(0, newLeft);
             if (resizeDir.includes('top')) newTop = Math.max(0, newTop);
             if (resizeDir.includes('right')) newWidth = Math.min(newWidth, maxWidth - newLeft);
@@ -369,17 +499,21 @@
     });
 
     // Toggle functionality
-    consoleHeader.querySelector('#console-toggle-pro').addEventListener('click', () => {
+    consoleToggle.addEventListener('click', () => {
         const isVisible = consoleContent.style.display === 'flex';
         consoleContent.style.display = isVisible ? 'none' : 'flex';
         consoleContainer.style.height = isVisible ? '40px' : '350px';
-        consoleHeader.querySelector('#console-toggle-pro').textContent = isVisible ? '▲' : '▼';
+        consoleToggle.textContent = isVisible ? '▲' : '▼';
         saveConsolePosition();
+    });
+
+    // Close functionality
+    consoleClose.addEventListener('click', () => {
+        consoleContainer.style.display = 'none';
     });
 
     // Execute code with toast notification
     function executeCode() {
-        // Create toast notification
         const toast = document.createElement('div');
         toast.style.position = 'fixed';
         toast.style.top = '15px';
@@ -396,15 +530,13 @@
         toast.style.transition = 'opacity 0.3s ease';
         toast.style.fontSize = '12px';
         toast.textContent = '✅ Executed!';
-
+        
         document.body.appendChild(toast);
-
-        // Show toast
+        
         setTimeout(() => {
             toast.style.opacity = '1';
         }, 10);
-
-        // Hide toast after 2 seconds
+        
         setTimeout(() => {
             toast.style.opacity = '0';
             setTimeout(() => {
@@ -445,10 +577,10 @@
         if (obj instanceof Node) {
             return `[${obj.constructor.name}] ${obj.nodeName}${obj.id ? '#' + obj.id : ''}${obj.className ? '.' + obj.className.split(' ').join('.') : ''}`;
         }
-
+        
         if (obj instanceof Window) return '[Window]';
         if (obj instanceof Document) return '[Document]';
-
+        
         if (obj instanceof HTMLElement) {
             return `[HTMLElement] <${obj.tagName.toLowerCase()}${obj.id ? '#' + obj.id : ''}${obj.className ? '.' + obj.className.split(' ').join('.') : ''}>`;
         }
@@ -479,38 +611,46 @@
         }
     });
 
-    // HOTKEY (Ctrl+Shift+C) to toggle expand/collapse
+    // HOTKEY (Ctrl+Shift+C) to toggle
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.shiftKey && e.key === 'C') {
             const isVisible = consoleContent.style.display === 'flex';
             consoleContent.style.display = isVisible ? 'none' : 'flex';
             consoleContainer.style.height = isVisible ? '40px' : '350px';
-            consoleHeader.querySelector('#console-toggle-pro').textContent = isVisible ? '▲' : '▼';
+            consoleToggle.textContent = isVisible ? '▲' : '▼';
             saveConsolePosition();
             e.preventDefault();
         }
-
-        // ESC to collapse
-        if (e.key === 'Escape' && consoleContent.style.display === 'flex') {
-            consoleContent.style.display = 'none';
-            consoleContainer.style.height = '40px';
-            consoleHeader.querySelector('#console-toggle-pro').textContent = '▲';
-            saveConsolePosition();
+        
+        if (e.key === 'Escape') {
+            if (consoleContent.style.display === 'flex') {
+                consoleContent.style.display = 'none';
+                consoleContainer.style.height = '40px';
+                consoleToggle.textContent = '▲';
+                saveConsolePosition();
+            } else {
+                consoleContainer.style.display = 'none';
+            }
             e.preventDefault();
         }
     });
 
     // Menu command in Tampermonkey
     if (typeof GM_registerMenuCommand !== 'undefined') {
-        GM_registerMenuCommand('Toggle Web Console', () => {
+        GM_registerMenuCommand('Show Web Console', () => {
+            consoleContainer.style.display = '';
+        });
+        
+        GM_registerMenuCommand('Toggle Expand/Collapse', () => {
             const isVisible = consoleContent.style.display === 'flex';
             consoleContent.style.display = isVisible ? 'none' : 'flex';
             consoleContainer.style.height = isVisible ? '40px' : '350px';
-            consoleHeader.querySelector('#console-toggle-pro').textContent = isVisible ? '▲' : '▼';
+            consoleToggle.textContent = isVisible ? '▲' : '▼';
             saveConsolePosition();
         });
-
+        
         GM_registerMenuCommand('Reset Console Position', () => {
+            consoleContainer.style.display = '';
             consoleContainer.style.left = '5px';
             consoleContainer.style.top = '5px';
             consoleContainer.style.right = 'auto';
