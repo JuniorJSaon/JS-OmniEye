@@ -54,3 +54,6 @@
     Custom hotkeys for show/hide
 
     Position memory across sessions
+
+## Idea for feature for console:
+- element inspector
